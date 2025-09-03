@@ -19,7 +19,7 @@ class {CLASS_NAME} extends Migration
             $table->string('path', 191)
                 ->index();
             // What parameters were passed in (e.g. ?status=new)
-            $table->string('params')
+            $table->string('params', 512)
                 ->nullable()
                 ->fulltext();
             // HTTP method (e.g. POST/PUT/DELETE)
@@ -32,8 +32,14 @@ class {CLASS_NAME} extends Migration
             // The entire JSON encoded payload of the request
             $table->json('body')
                 ->nullable();
+            // The headers that were part of the request
+            $table->json('request_headers')
+                ->nullable();
             // The entire JSON encoded responses
             $table->json('response')
+                ->nullable();
+            // The headers that were part of the response
+            $table->json('response_headers')
                 ->nullable();
             // Internal exceptions that occurred during the request
             $table->string('exception')
