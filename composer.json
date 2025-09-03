@@ -24,19 +24,19 @@
     ],
     "require": {
         "php": "^8.2.0|^8.3.0|^8.4.0",
-        "always-open/laravel-process-stamps": "^5.0|^6.0|^7.0|^8.0",
+        "always-open/laravel-process-stamps": "^7.0|^8.0",
         "guzzlehttp/guzzle": "^7.4",
-        "laravel/framework": "^8.0|^9.0|^10.0"
+        "laravel/framework": "^11.0|^12.0"
     },
     "require-dev": {
-        "doctrine/dbal": "^2.9|^3.0",
+        "doctrine/dbal": "^3.0|^4.0",
         "friendsofphp/php-cs-fixer": "^3.1",
         "laravel/tinker": "^2.7",
-        "nunomaduro/larastan": "^1.0",
-        "orchestra/testbench": "^6.22",
-        "phpstan/phpstan-deprecation-rules": "^1.0",
-        "phpstan/phpstan-phpunit": "^1.0",
-        "phpunit/phpunit": "^9.5"
+        "nunomaduro/larastan": "^3.0",
+        "orchestra/testbench": "^9.1",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "phpunit/phpunit": "^12.0"
     },
     "autoload": {
         "psr-4": {
