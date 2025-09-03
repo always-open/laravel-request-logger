@@ -88,7 +88,7 @@ function makeFacebookApiCall(array $body, Client $facebook_client)
 }
 ```
 
-Instead of manually setting the response data you can instead leverage the `updateFromRequest` method:
+Instead of manually setting the response data you can instead leverage the `updateFromResponse` method:
 ```php
 function makeFacebookApiCall(array $body, Client $facebook_client)
 {
