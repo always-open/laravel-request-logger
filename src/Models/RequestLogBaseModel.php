@@ -66,7 +66,8 @@ class RequestLogBaseModel extends Model
         return $instance;
     }
 
-    public function updateFromResponse(ResponseInterface $response): self {
+    public function updateFromResponse(ResponseInterface $response): self
+    {
         $this->response = json_decode($response->getBody()->getContents(), true);
         $this->response_code = $response->getStatusCode();
         $this->response_headers = $response->getHeaders();
