@@ -18,6 +18,19 @@ You can install the package via composer:
 composer require always-open/laravel-request-logger
 ```
 
+### Breaking change
+If you are upgrading to 3.x or newer, the following steps must be taken as new fields have been added to the logging tables.
+- Create a migration for each logging tables with the following
+```php
+// The headers that were part of the request
+$table->json('request_headers')
+    ->nullable();
+// The headers that were part of the response
+$table->json('response_headers')
+    ->nullable();
+```
+Run this migration prior to upgrading the package.
+
 ## Configuration
 
 ``` php
@@ -74,6 +87,35 @@ function makeFacebookApiCall(array $body, Client $facebook_client)
     $request_log->save();
 }
 ```
+
+Instead of manually setting the response data you can instead leverage the `updateFromResponse` method:
+```php
+function makeFacebookApiCall(array $body, Client $facebook_client)
+{
+    $request_headers = [
+        'api-key' => $config->apiKey,
+        'Content-Type' => 'application/json',
+    ];
+
+    $versioned_path = self::buildVersionedUrlPath($path);
+
+    $encoded_body = json_encode($body, JSON_UNESCAPED_SLASHES);
+
+    $request = new Request(
+        'GET',
+        '/v1/users',
+        $request_headers,
+        $encoded_body,
+    );
+    
+    $request_log = FacebookRequestLog::makeFromGuzzle($request);
+    
+    $response = $client->send($request);
+    $request_log->updateFromResponse($response);
+}
+```
+
+
 You can also manually set each property and then save the log instance.
 
 ### Testing

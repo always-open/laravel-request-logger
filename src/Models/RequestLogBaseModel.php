@@ -5,6 +5,7 @@ namespace AlwaysOpen\RequestLogger\Models;
 use AlwaysOpen\RequestLogger\Observers\RequestLogObserver;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Database\Eloquent\Model;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * AlwaysOpen\RequestLogger\Models\RequestLogBaseModel
@@ -14,7 +15,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property string               $http_method
  * @property int|null             $response_code
  * @property array|string|null    $body
+ * @property array|string|null    $request_headers
  * @property array|string|null    $response
+ * @property array|string|null    $response_headers
  * @property string|null          $exception
  * @property \Carbon\Carbon|null  $occurred_at
  */
@@ -25,7 +28,9 @@ class RequestLogBaseModel extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'body' => 'json',
+        'request_headers' => 'json',
         'response' => 'json',
+        'response_headers' => 'json',
     ];
 
     protected $guarded = [
@@ -56,7 +61,19 @@ class RequestLogBaseModel extends Model
         $instance->path = $request->getUri()->getPath();
         $instance->http_method = $request->getMethod();
         $instance->body = $request->getBody()->getContents();
+        $instance->request_headers = $request->getHeaders();
 
         return $instance;
+    }
+
+    public function updateFromResponse(ResponseInterface $response): self
+    {
+        $this->response = json_decode($response->getBody()->getContents(), true);
+        $this->response_code = $response->getStatusCode();
+        $this->response_headers = $response->getHeaders();
+
+        $this->save();
+
+        return $this;
     }
 }
