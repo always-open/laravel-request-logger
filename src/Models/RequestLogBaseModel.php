@@ -4,6 +4,7 @@ namespace AlwaysOpen\RequestLogger\Models;
 
 use AlwaysOpen\RequestLogger\Observers\RequestLogObserver;
 use GuzzleHttp\Psr7\Request;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Psr\Http\Message\ResponseInterface;
 
@@ -19,8 +20,9 @@ use Psr\Http\Message\ResponseInterface;
  * @property array|string|null    $response
  * @property array|string|null    $response_headers
  * @property string|null          $exception
- * @property \Carbon\Carbon|null  $occurred_at
+ * @property \Carbon\CarbonInterface|null $occurred_at
  */
+#[ObservedBy(RequestLogObserver::class)]
 class RequestLogBaseModel extends Model
 {
     protected $casts = [
@@ -39,12 +41,6 @@ class RequestLogBaseModel extends Model
     ];
 
     protected $dateFormat = 'Y-m-d H:i:s.u';
-
-    protected static function boot()
-    {
-        parent::boot();
-        parent::observe(RequestLogObserver::class);
-    }
 
     public static function make(array $props) : static
     {

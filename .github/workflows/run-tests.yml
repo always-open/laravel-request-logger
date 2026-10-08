@@ -2,9 +2,9 @@ name: run-tests
 
 on:
   push:
-    branches: [main, 3.x]
+    branches: [main, 3.x, 4.x]
   pull_request:
-    branches: [main, 3.x]
+    branches: [main, 3.x, 4.x]
 
 jobs:
   test:
@@ -15,11 +15,8 @@ jobs:
         os: [ubuntu-latest]
         # phpunit/phpunit ^12 requires PHP 8.3+.
         php: [8.3, 8.4, 8.5]
-        laravel: [11.*, 12.*]
+        laravel: [12.*, 13.*]
         stability: [prefer-stable]
-        include:
-          - laravel: 11.*
-          - laravel: 12.*
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
@@ -41,6 +38,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: Execute tests
