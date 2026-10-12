@@ -37,6 +37,19 @@ class RequestLogTest extends Orchestra
         $this->assertNotNull($log->occurred_at);
     }
 
+    public function test_subclass_sets_occurred_at_when_saving()
+    {
+        $log = new class extends RequestLogBaseModel {
+            protected $table = 'test_logs';
+        };
+
+        $this->assertNull($log->occurred_at);
+
+        $log::getEventDispatcher()->dispatch('eloquent.saving: '.$log::class, $log);
+
+        $this->assertNotNull($log->occurred_at);
+    }
+
     public function test_make_from_guzzle_works()
     {
         $request = new Request(
